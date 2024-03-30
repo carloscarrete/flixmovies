@@ -7,12 +7,15 @@ import { styles } from '../theme/'
 
 import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
 import TrendingMovies from '../components/TrendingMovies';
+import MovieList from '../components/MovieList'
 
 const ios = Platform.OS === 'ios'
 
 const HomeScreen = () => {
 
-    const [trendingMovies, setTrendingMovies] = useState([1,2,3])
+    const [trendingMovies, setTrendingMovies] = useState([1,2,3]);
+    const [upcomingMovies, setUpcominngMovies] = useState([1,2,3]);
+    const [topRated, setTopRared] = useState([1,2,3]);
 
     return (
         <View className='flex-1 bg-neutral-700'>
@@ -37,6 +40,10 @@ const HomeScreen = () => {
 
                 {/* Carrusel Trending Movies */}
                 <TrendingMovies data={trendingMovies}/>
+                {/* Upcoming Movies */}
+                <MovieList title="Upcoming Movies" data={upcomingMovies} />
+                {/* Top Rated Movies */}
+                <MovieList title="Top Rated Movies" data={topRated} />
                 
             </ScrollView>
         </View>
