@@ -16,8 +16,10 @@ export default function TrendingMovies({data}: Props) {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const handleClick = () => {
-    navigation.navigate('Movie');
+  const handleClick = (item:number) => {
+    navigation.navigate('Movie', {
+      item: item
+    });
   }
 
   return (
@@ -25,7 +27,7 @@ export default function TrendingMovies({data}: Props) {
       <Text className='text-white text-xl mx-4 mb-5'>Trending Movies</Text>
       <Carousel 
         data={data}
-        renderItem={({item}) => <MovieCard item={item} handleClick={handleClick}/>}
+        renderItem={({item}) => <MovieCard item={item} handleClick={() => handleClick(item) }/>}
         firstItem={1}
         sliderWidth={width}
         vertical={false}

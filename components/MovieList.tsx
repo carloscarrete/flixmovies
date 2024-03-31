@@ -13,7 +13,7 @@ interface Props {
 
 export default function MovieList({ data, title }: Props) {
 
-  const movieName = 'Gladiador - Que chingue su puta madre';
+  const movieName = 'Gladiador - prueba de película';
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
