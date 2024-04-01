@@ -7,6 +7,8 @@ import { HeartIcon } from 'react-native-heroicons/solid';
 import { Platform } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
+import Cast from '../components/Cast';
+import MovieList from '../components/MovieList';
 
 
 const { height, width } = Dimensions.get('window');
@@ -18,6 +20,10 @@ export default function MovieScreen() {
   const movieName = 'Gladiador - prueba de película';
 
   const { params } = useRoute();
+
+  const [cast, setCast] = useState([1,2,3,4,5])
+  const [similarMovies, setSimilarMovies] = useState([1,2,3,4,5])
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [isFavorited, setIsFavorited] = useState<boolean>(false)
   useEffect(() => {
@@ -70,6 +76,10 @@ export default function MovieScreen() {
           Shouting "Roma Invicta!" as his forces attack, General Maximus Decimus Meridius (Russell Crowe) leads the Roman Army to victory against Germanic barbarians in the year 180 A.D., ending a prolonged war and earning the esteem of elderly Emperor Marcus Aurelius. Although the dying Aurelius has a son, Commodus (Joaquin Phoenix), he decides to appoint temporary leadership to the morally-upstanding Maximus, with a desire to eventually return power to the Roman Senate. Aurelius informs Maximus and offers him time to consider before informing Commodus, who, in a bout of jealousy, murders his father.
         </Text>
       </View>
+
+      <Cast cast={cast} navigation={navigation} />
+
+      <MovieList title='Similar Movies' data={similarMovies} hiddenAll={true}/>
     </ScrollView>
   )
 }

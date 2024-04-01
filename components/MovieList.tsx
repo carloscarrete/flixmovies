@@ -3,15 +3,17 @@ import React from 'react'
 import { styles } from '../theme'
 import { useNavigation, ParamListBase } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/';
+import { truncateText } from '../utils/truncateText';
 
 const { height, width } = Dimensions.get('window');
 
 interface Props {
   title: string,
-  data: number[]
+  data: number[],
+  hiddenAll?: boolean
 }
 
-export default function MovieList({ data, title }: Props) {
+export default function MovieList({ data, title, hiddenAll=false }: Props) {
 
   const movieName = 'Gladiador - prueba de película';
 
@@ -22,7 +24,7 @@ export default function MovieList({ data, title }: Props) {
       <View className='mx-4 flex-row justify-between items-center'>
         <Text className='text-white text-xl'>{title}</Text>
         <TouchableOpacity>
-          <Text className='text-xl' style={styles.secondaryText}>See All</Text>
+          {hiddenAll ? null : <Text className='text-xl' style={styles.secondaryText}>See All</Text>}
         </TouchableOpacity>
       </View>
       <FlatList
@@ -42,7 +44,7 @@ export default function MovieList({ data, title }: Props) {
                 }
               />
               <Text className='text-white ml-1'>
-                {movieName.length>12 ? movieName.slice(0, 15) + '...' : movieName}
+                {truncateText(movieName)}
               </Text>
             </View>
           </TouchableOpacity>
