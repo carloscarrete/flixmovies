@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
+import LoadingC from '../components/LoadingC';
 
 
 const { height, width } = Dimensions.get('window');
@@ -23,9 +24,11 @@ export default function MovieScreen() {
 
   const [cast, setCast] = useState([1,2,3,4,5])
   const [similarMovies, setSimilarMovies] = useState([1,2,3,4,5])
+  const [loading, setLoading] = useState<boolean>(false)
+
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const [isFavorited, setIsFavorited] = useState<boolean>(false)
+  const [isFavorited, setIsFavorited] = useState<boolean>(false);
   useEffect(() => {
 
   }, [])
@@ -45,6 +48,13 @@ export default function MovieScreen() {
             <HeartIcon size="24" color={isFavorited ? 'red' : 'white'} strokeWidth={2} />
           </TouchableOpacity>
         </SafeAreaView>
+        {
+          loading ? 
+          (
+            <LoadingC />
+          )
+          :
+          (
         <View>
           <Image
             source={require('../assets/images/imagePoster3.jpg')}
@@ -58,6 +68,8 @@ export default function MovieScreen() {
             className='absolute bottom-0'
           />
         </View>
+          )
+        }
       </View>
 
       <View style={{ marginTop: (height * 0.09) }} className='space-y-3'>
