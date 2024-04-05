@@ -7,9 +7,13 @@ import { HeartIcon } from 'react-native-heroicons/solid';
 import { Platform } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
-import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import LoadingC from '../components/LoadingC';
+import { MovieDetail, Result } from '../interfaces/Movies';
+import { fetchMovieCast, fetchMovieDetail, fetchSimilarMovies } from '../services/actions';
+import { Cast as Casting } from '../interfaces/Cast';
+import Cast from '../components/Cast';
+import { image500 } from '../services/api/movies';
 
 
 const { height, width } = Dimensions.get('window');
@@ -21,18 +25,34 @@ export default function MovieScreen() {
   const movieName = 'Gladiador - prueba de película';
 
   const { params } = useRoute();
+  const { item } = params as { item: Result }
 
-  const [cast, setCast] = useState([1,2,3,4,5])
-  const [similarMovies, setSimilarMovies] = useState([1,2,3,4,5])
+  const [cast, setCast] = useState<Casting>()
+  const [similarMovies, setSimilarMovies] = useState<Result[]>();
+  const [movieDetails, setMovieDetails] = useState<MovieDetail>();
   const [loading, setLoading] = useState<boolean>(false)
 
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   useEffect(() => {
+    const getDetails = async () => {
+      const data = await fetchMovieDetail(item.id);
+      setMovieDetails(data);
+    }
+    const getCast = async () => {
+      const data = await fetchMovieCast(item.id);
+      setCast(data);
+    }
+    const getSimilarMovies = async () => {
+      const data = await fetchSimilarMovies(item.id);
+      setSimilarMovies(data.results);
+    }
 
+    getDetails();
+    getCast();
+    getSimilarMovies();
   }, [])
-
 
   return (
     <ScrollView
@@ -49,49 +69,52 @@ export default function MovieScreen() {
           </TouchableOpacity>
         </SafeAreaView>
         {
-          loading ? 
-          (
-            <LoadingC />
-          )
-          :
-          (
-        <View>
-          <Image
-            source={require('../assets/images/imagePoster3.jpg')}
-            style={{ width: width, height: height * 0.55 }}
-          />
-          <LinearGradient
-            colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,1)']}
-            style={{ width: width, height: height * 0.40 }}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 1 }}
-            className='absolute bottom-0'
-          />
-        </View>
-          )
+          loading ?
+            (
+              <LoadingC />
+            )
+            :
+            (
+              <View>
+                <Image
+                  source={{ uri: image500(item.backdrop_path) }}
+                  style={{ width: width, height: height * 0.55 }}
+                />
+                <LinearGradient
+                  colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,1)']}
+                  style={{ width: width, height: height * 0.40 }}
+                  start={{ x: 0.5, y: 0 }}
+                  end={{ x: 0.5, y: 1 }}
+                  className='absolute bottom-0'
+                />
+              </View>
+            )
         }
       </View>
 
       <View style={{ marginTop: (height * 0.09) }} className='space-y-3'>
         <Text className='text-white font-bold text-3xl text-center tracking-wider'>
-          {movieName}
+          {item.title}
         </Text>
-        <Text className='text-neutral-400 text-center text-base font-semibold'>
-          Released - 2024 - 190 min
-        </Text>
+        <View className="flex-row items-center justify-center">
+          <View className={`h-2 w-2 rounded-full ${movieDetails?.status === 'Released' ? 'bg-green-500' : 'bg-orange-500'} mr-1`}></View>
+          <Text className='text-neutral-400 text-center text-base font-semibold'>
+            {movieDetails?.status} | {movieDetails?.release_date.split('-')[0] ? movieDetails?.release_date.split('-')[0] : new Date().getFullYear()} | {movieDetails?.runtime} min
+          </Text>
+        </View>
         <View className='flex-row justify-center mx-4 space-x-2'>
           <Text className='text-neutral-400 font-semibold text-center text-base'>Action - </Text>
           <Text className='text-neutral-400 font-semibold text-center text-base'>Drama - </Text>
           <Text className='text-neutral-400 font-semibold text-center text-base'>Comedy - </Text>
         </View>
         <Text className='text-white mx-4 text-base'>
-          Shouting "Roma Invicta!" as his forces attack, General Maximus Decimus Meridius (Russell Crowe) leads the Roman Army to victory against Germanic barbarians in the year 180 A.D., ending a prolonged war and earning the esteem of elderly Emperor Marcus Aurelius. Although the dying Aurelius has a son, Commodus (Joaquin Phoenix), he decides to appoint temporary leadership to the morally-upstanding Maximus, with a desire to eventually return power to the Roman Senate. Aurelius informs Maximus and offers him time to consider before informing Commodus, who, in a bout of jealousy, murders his father.
+          {item.overview}
         </Text>
       </View>
 
-      <Cast cast={cast} navigation={navigation} />
+      {cast && <Cast cast={cast.cast} navigation={navigation} />}
 
-      <MovieList title='Similar Movies' data={similarMovies} hiddenAll={true}/>
+      {similarMovies && <MovieList title='Similar Movies' data={similarMovies} hiddenAll={true} />}
     </ScrollView>
   )
 }

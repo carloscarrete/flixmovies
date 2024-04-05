@@ -4,16 +4,18 @@ import { styles } from '../theme'
 import { useNavigation, ParamListBase } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/';
 import { truncateText } from '../utils/truncateText';
+import { Result } from '../interfaces/Movies';
+import { image185 } from '../services/api/movies';
 
 const { height, width } = Dimensions.get('window');
 
 interface Props {
   title: string,
-  data: number[],
+  data: Result[]
   hiddenAll?: boolean
 }
 
-export default function MovieList({ data, title, hiddenAll=false }: Props) {
+export default function MovieList({ data, title, hiddenAll = false }: Props) {
 
   const movieName = 'Gladiador - prueba de película';
 
@@ -22,21 +24,22 @@ export default function MovieList({ data, title, hiddenAll=false }: Props) {
   return (
     <View className='mb-8 space-y-4'>
       <View className='mx-4 flex-row justify-between items-center'>
-        <Text className='text-white text-xl'>{title}</Text>
+        <Text className='text-white text-xl'>{title}</Text>                                    
         <TouchableOpacity>
           {hiddenAll ? null : <Text className='text-xl' style={styles.secondaryText}>See All</Text>}
         </TouchableOpacity>
       </View>
       <FlatList
+        showsHorizontalScrollIndicator={false}
         horizontal
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('Movie')}>
+          <TouchableOpacity onPress={() => { navigation.navigate('Movie', { item }) }}>
             <View className='space-y-1 mr-1'>
               <Image
-                className='rounded-3xl'
-                source={require('../assets/images/imagePoster2.jpg')}
+                className='rounded-3xl'                  
+                source={{ uri: image185(item.poster_path) }}
                 style={{
                   width: width * 0.33,
                   height: height * 0.22
@@ -44,7 +47,7 @@ export default function MovieList({ data, title, hiddenAll=false }: Props) {
                 }
               />
               <Text className='text-white ml-1'>
-                {truncateText(movieName)}
+                {truncateText(item.title)}
               </Text>
             </View>
           </TouchableOpacity>

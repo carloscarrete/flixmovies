@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Platform, ScrollView, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -12,18 +12,60 @@ import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import Loading from '../components/LoadingC';
 import LoadingC from '../components/LoadingC'
+import { fetchNowPlaying, fetchPopularMovies, fetchTopRated, fetchTrendingMovies, fetchUpcoming, } from '../services/actions'
+import { Movies, Result } from '../interfaces/Movies'
 
 const ios = Platform.OS === 'ios'
 
 const HomeScreen = () => {
 
-    const [trendingMovies, setTrendingMovies] = useState([1, 2, 3]);
-    const [upcomingMovies, setUpcominngMovies] = useState([1, 2, 3]);
-    const [topRated, setTopRared] = useState([1, 2, 3]);
-    const [loading, setLoading] = useState<boolean>(false)
+    const [trendingMovies, setTrendingMovies] = useState<Result[]>();
+    const [upcomingMovies, setUpcominngMovies] = useState<Result[]>();
+    const [topRatedMovies, setTopRatedMovies] = useState<Result[]>();
+
+    const [loading, setLoading] = useState<boolean>(true)
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
+    useEffect(() => {
+        getTrendingMovies();
+        getUpcomingMovies();
+        getRatedMovies();
+      /*   getNowPlayingMovies();
+        getPopularMovies(); */
+    }, [])
+    
+  /* Get movies */
+    const getTrendingMovies = async () => {
+        const data = await fetchTrendingMovies();
+        if(data&& data.results.length > 0) setTrendingMovies(data.results) 
+        setLoading(false)
+        return data
+    }
+
+    const getUpcomingMovies = async () => {
+        const data = await fetchUpcoming();
+        if(data&& data.results.length > 0) setUpcominngMovies(data.results) 
+        return data
+    }
+
+    const getRatedMovies = async () => {
+        const data = await fetchTopRated();
+        if(data&& data.results.length > 0) setTopRatedMovies(data.results)
+        return data
+    }
+    
+    const getNowPlayingMovies = async () => {
+        const data = await fetchNowPlaying();
+         if(data&& data.results.length > 0) setTrendingMovies(data.results) 
+        return data
+    }
+
+    const getPopularMovies = async () => {
+        const data = await fetchPopularMovies();
+        if(data&& data.results.length > 0) setTrendingMovies(data.results) 
+        return data
+    }
 
     return (
         <View className='flex-1 bg-neutral-700'>
@@ -54,11 +96,11 @@ const HomeScreen = () => {
                 >
     
                     {/* Carrusel Trending Movies */}
-                    <TrendingMovies data={trendingMovies} />
+                    {  trendingMovies && <TrendingMovies data={trendingMovies} />   }
                     {/* Upcoming Movies */}
-                    <MovieList title="Upcoming Movies" data={upcomingMovies} />
+                   { upcomingMovies && <MovieList title="Upcoming Movies" data={upcomingMovies} />}
                     {/* Top Rated Movies */}
-                    <MovieList title="Top Rated Movies" data={topRated} />
+                   { topRatedMovies && <MovieList title="Top Rated Movies" data={topRatedMovies} />}
     
                 </ScrollView>
             }

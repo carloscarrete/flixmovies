@@ -4,11 +4,12 @@ import Carousel from 'react-native-snap-carousel'
 import MovieCard from './MovieCard'
 import { useNavigation, ParamListBase } from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/';
+import { Result } from '../interfaces/Movies';
 
 const {height, width} = Dimensions.get('window');
 
 interface Props {
-  data: number[]
+  data: Result[] 
 }
 
 
@@ -16,7 +17,7 @@ export default function TrendingMovies({data}: Props) {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const handleClick = (item:number) => {
+  const handleClick = (item:Result) => {
     navigation.navigate('Movie', {
       item: item
     });
