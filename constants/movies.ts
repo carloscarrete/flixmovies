@@ -96,3 +96,6 @@ enum Genders {
 export const getGender = (gender: number): string | undefined => {
     return Object.keys(Genders).find(key => Genders[key as keyof typeof Genders] === gender);
 }
+
+export const noImageToShow600 = () :string => 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019'
+export const noImageToShow342 = () :string => 'https://via.placeholder.com/342x512'

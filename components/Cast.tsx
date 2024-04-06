@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { CastElement } from '../interfaces/Cast';
 import { image342 } from '../services/api/movies';
+import { noImageToShow342 } from '../constants/movies';
 
 interface Props {
   cast: CastElement[]
@@ -30,7 +31,7 @@ export default function Cast({ cast, navigation }: Props) {
           <TouchableOpacity onPress={() => navigation.navigate('Person', { item})}>
             <Image
               className="w-24 h-32 rounded-xl"
-              source={{ uri: item.profile_path ? image342(item.profile_path) : 'https://via.placeholder.com/342x512' }}
+              source={{ uri: item.profile_path ? image342(item.profile_path) : noImageToShow342() }}
             />
             <Text className="text-white text-sm">{truncateText(item.name)}</Text>
             <Text className="text-slate-500 text-xs">{truncateText(item.character || '')}</Text>

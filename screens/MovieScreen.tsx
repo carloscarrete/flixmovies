@@ -14,6 +14,7 @@ import { fetchMovieCast, fetchMovieDetail, fetchSimilarMovies } from '../service
 import { Cast as Casting } from '../interfaces/Cast';
 import Cast from '../components/Cast';
 import { image500 } from '../services/api/movies';
+import { noImageToShow600 } from '../constants/movies';
 
 
 const { height, width } = Dimensions.get('window');
@@ -48,7 +49,6 @@ export default function MovieScreen() {
       const data = await fetchSimilarMovies(item.id);
       setSimilarMovies(data.results);
     }
-
     getDetails();
     getCast();
     getSimilarMovies();
@@ -77,7 +77,7 @@ export default function MovieScreen() {
             (
               <View>
                 <Image
-                  source={{ uri: image500(item.backdrop_path) }}
+                  source={{ uri: item.backdrop_path ? image500(item?.backdrop_path) : noImageToShow600() }}
                   style={{ width: width, height: height * 0.55 }}
                 />
                 <LinearGradient
@@ -103,9 +103,14 @@ export default function MovieScreen() {
           </Text>
         </View>
         <View className='flex-row justify-center mx-4 space-x-2'>
-          <Text className='text-neutral-400 font-semibold text-center text-base'>Action - </Text>
+          {/* <Text className='text-neutral-400 font-semibold text-center text-base'>Action - </Text>
           <Text className='text-neutral-400 font-semibold text-center text-base'>Drama - </Text>
-          <Text className='text-neutral-400 font-semibold text-center text-base'>Comedy - </Text>
+          <Text className='text-neutral-400 font-semibold text-center text-base'>Comedy - </Text> */}
+          {
+            movieDetails?.genres && movieDetails?.genres.map((genre, index) => (
+              <Text key={index} className='text-neutral-400 font-semibold text-center text-sm'>{genre.name} </Text>
+            ))
+          }
         </View>
         <Text className='text-white mx-4 text-base'>
           {item.overview}

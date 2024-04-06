@@ -19,6 +19,7 @@ export const fetchPopularMovies = async () : Promise<Movies> => {
 export const fetchMoviesByTitle = async (title: string) : Promise<Movies> => {
     try{
         const {data} = await moviesApi.get<Movies>(`/search/movie?query=${title}`);
+        //console.log(data.results)
         return data;
     }catch(error){
         console.log(error)
