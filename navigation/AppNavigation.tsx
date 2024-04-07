@@ -8,6 +8,7 @@ import { DrawerItem, DrawerItemList, createDrawerNavigator } from '@react-naviga
 import { HeartIcon, HomeIcon } from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image } from 'react-native';
+import FavoritesScreen from '../screens/FavoritesScreen';
 
 
 const StackNav = () => {
@@ -78,7 +79,7 @@ export default function AppNavigation() {
         }}
         screenOptions={{ headerShown: false, drawerStyle: { backgroundColor: 'rgb(64 64 64);' } }}>
         <Drawer.Screen name="Home" component={StackNav} options={{ drawerLabelStyle: { color: 'white' }, drawerIcon: () => (<HomeIcon color={'white'} strokeWidth={2} />) }} />
-        <Drawer.Screen name="Favorites" component={StackNav} options={{ drawerLabelStyle: { color: 'white' }, drawerIcon: () => (<HeartIcon color={'white'} strokeWidth={2} />) }} />
+        <Drawer.Screen name="Favorites" component={FavoritesScreen} options={{ drawerLabelStyle: { color: 'white' }, drawerIcon: () => (<HeartIcon color={'white'} strokeWidth={2} />) }} />
       </Drawer.Navigator>
     </NavigationContainer>
   )

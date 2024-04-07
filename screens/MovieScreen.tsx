@@ -60,7 +60,7 @@ export default function MovieScreen() {
       className='flex-1 bg-neutral-900'
     >
       <View className='w-full'>
-        <SafeAreaView className={'absolute z-20 w-full flex-row justify-between items-center px-4 m-6' + topMargin}>
+        <SafeAreaView className={'absolute z-20 w-full flex-row justify-between items-center px-4 mx-0 ' + topMargin}>
           <TouchableOpacity className='rounded-3xl p-1' onPress={() => navigation.goBack()}>
             <ChevronLeftIcon size="24" color='#387ADF' strokeWidth={2} />
           </TouchableOpacity>
