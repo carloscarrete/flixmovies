@@ -15,6 +15,7 @@ import { Cast as Casting } from '../interfaces/Cast';
 import Cast from '../components/Cast';
 import { image500 } from '../services/api/movies';
 import { noImageToShow600 } from '../constants/movies';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const { height, width } = Dimensions.get('window');
@@ -36,6 +37,24 @@ export default function MovieScreen() {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
+
+  const storageFavoriteMovie = async (movie: Result) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('movies');
+      const currentMovies = jsonValue ? JSON.parse(jsonValue) : [];
+
+      const existingMovieIndex = currentMovies.findIndex((m: Result) => m.id === movie.id);
+
+      existingMovieIndex !== -1
+        ? currentMovies.splice(existingMovieIndex, 1)
+        : currentMovies.push(movie);
+
+      await AsyncStorage.setItem('movies', JSON.stringify(currentMovies));
+    } catch (e) {
+      console.log(e)
+    }
+  } 
+
   useEffect(() => {
     const getDetails = async () => {
       const data = await fetchMovieDetail(item.id);
@@ -52,7 +71,7 @@ export default function MovieScreen() {
     getDetails();
     getCast();
     getSimilarMovies();
-  }, [])
+  }, [item.id])
 
   return (
     <ScrollView
@@ -64,7 +83,7 @@ export default function MovieScreen() {
           <TouchableOpacity className='rounded-3xl p-1' onPress={() => navigation.goBack()}>
             <ChevronLeftIcon size="24" color='#387ADF' strokeWidth={2} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsFavorited(!isFavorited)}>
+          <TouchableOpacity onPress={() => {setIsFavorited(!isFavorited), storageFavoriteMovie(item)}}>
             <HeartIcon size="24" color={isFavorited ? 'red' : 'white'} strokeWidth={2} />
           </TouchableOpacity>
         </SafeAreaView>
