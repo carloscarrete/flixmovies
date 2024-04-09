@@ -55,7 +55,7 @@ export default function FavoritesScreen() {    const navigation = useNavigation<
             </SafeAreaView>
         </View>
 
-            <View className='justify-center items-center pb-14'>
+            <View className='justify-center items-center pb-16'>
                 <FlatList
                     numColumns={Math.floor(width / (width * 0.45 + 10))}
                     data={favoriteMovies}
@@ -65,7 +65,7 @@ export default function FavoritesScreen() {    const navigation = useNavigation<
                                 <Image
                                     source={{ uri: image342(item.poster_path) }}
                                     className='rounded-2xl'
-                                    style={{ width: width * 0.45, height: height * 0.3 }} />
+                                    style={{ width: width * 0.43, height: height * 0.28 }} />
                                 <Text className='text-neutral-300'>{truncateText(item.title)}</Text>
                             </View>
                         </TouchableWithoutFeedback>

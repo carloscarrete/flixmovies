@@ -73,6 +73,21 @@ export default function MovieScreen() {
     getSimilarMovies();
   }, [item.id])
 
+  useEffect(() => {
+    const checkIfFavorited = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('movies');
+        const currentMovies = jsonValue ? JSON.parse(jsonValue) : [];
+        const isFavorited = currentMovies.some((m: Result) => m.id === item.id);
+        setIsFavorited(isFavorited);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  
+    checkIfFavorited();
+  }, [item.id]);
+
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
