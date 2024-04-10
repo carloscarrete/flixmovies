@@ -17,7 +17,6 @@ const { height, width } = Dimensions.get('window');
 export default function SearchScreen() {
 
     const [results, setResults] = useState<Result[]>();
-    const [results2, set2] = useState([12345,23,45,]);
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [loading, setLoading] = useState<boolean>(false)
 

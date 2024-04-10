@@ -1,5 +1,5 @@
 import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ParamListBase, useNavigation, useRoute } from '@react-navigation/native';
@@ -8,12 +8,12 @@ import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { HeartIcon } from 'react-native-heroicons/solid';
 import MovieList from '../components/MovieList';
 import LoadingC from '../components/LoadingC';
-import { Result } from '../interfaces/Movies';
 import { fetchPeopleDetails, fetchPeopleMoviesDetailsCredits } from '../services/actions';
-import { CastCredits, People } from '../interfaces/People';
 import { image500 } from '../services/api/movies';
 import { CastElement } from '../interfaces/Cast';
 import { getGender } from '../constants/movies';
+import usePerson from '../hooks/usePerson';
+import usePeopleCredits from '../hooks/usePeopleCredits';
 
 const { height, width } = Dimensions.get('window');
 const ios = Platform.OS === 'ios'
@@ -23,25 +23,11 @@ export default function PersonScreen() {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
-  const [personMovies, setPersonMovies] = useState<Result[]>();
-  const [personDetails, setPersonDetails] = useState<People>();
-  const [loading, setLoading] = useState<boolean>(false);
   const { params } = useRoute();
   const { item } = params as { item: CastElement }
 
-  useEffect(() => {
-    const peopleDetails = async () => {
-      const data = await fetchPeopleDetails(item.id);
-      setPersonDetails(data);
-    }
-     const peopleMovies = async () => {
-      const data = await fetchPeopleMoviesDetailsCredits(item.id);
-      setPersonMovies(data.cast);
-    }
-    peopleMovies(); 
-    peopleDetails()
-  }, [])
-
+  const {data: personDetails, isLoadingPerson: isLoading} = usePerson(['person', item.id], () => fetchPeopleDetails(item.id));
+  const {data: personMovies} = usePeopleCredits(['movies', 'similar', item.id], () => fetchPeopleMoviesDetailsCredits(item.id));
 
   return (
     <ScrollView className='bg-neutral-900 flex-1'>
@@ -55,7 +41,7 @@ export default function PersonScreen() {
       </SafeAreaView>
 
       {
-        loading
+        isLoading
           ?
           (<LoadingC />)
           :
