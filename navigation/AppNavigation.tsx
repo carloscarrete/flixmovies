@@ -30,6 +30,7 @@ const StackNav = () => {
 const Drawer = createDrawerNavigator();
 
 export default function AppNavigation() {
+  
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>

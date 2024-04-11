@@ -39,7 +39,7 @@ export default function FavoritesScreen() {    const navigation = useNavigation<
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, [AsyncStorage.getItem('movies')]);
 
 
     return (
