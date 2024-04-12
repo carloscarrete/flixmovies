@@ -12,22 +12,22 @@ import { debounce } from 'lodash';
 import { fetchMoviesByTitle } from '../services/actions';
 import { Result } from '../interfaces/Movies';
 import { image342 } from '../services/api/movies';
+import { useQuery } from '@tanstack/react-query';
+import useMovies from '../hooks/useMovies';
 
 const { height, width } = Dimensions.get('window');
 export default function SearchScreen() {
-
-    const [results, setResults] = useState<Result[]>();
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [loading, setLoading] = useState<boolean>(false)
+    const [searchQuery, setSearchQuery] = useState('');
+    const { data: results } = useMovies(['movies', searchQuery], () => fetchMoviesByTitle(searchQuery));
 
     const handleTextChange = async (text: string) => {
         if(text.length>2){
-            setLoading(true)
-            fetchMoviesByTitle(text).then(data => setResults(data.results)).finally(() => setLoading(false))
+            setSearchQuery(text)
         }
     }
     const handleTextDebounce = useCallback(debounce(handleTextChange, 450), []);
-
 
     return (
         <SafeAreaView className='flex-1 bg-neutral-900'>
