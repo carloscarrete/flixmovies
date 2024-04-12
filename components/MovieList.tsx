@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack/';
 import { truncateText } from '../utils/truncateText';
 import { Result } from '../interfaces/Movies';
 import { image185 } from '../services/api/movies';
+import { noImageToShow342 } from '../constants/movies';
 
 const { height, width } = Dimensions.get('window');
 
@@ -36,17 +37,17 @@ export default function MovieList({ data, title, hiddenAll = false }: Props) {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => { navigation.navigate('Movie', { item }) }}>
-            <View className='space-y-1 mr-1'>
+            <View className='space-y-1 mr-2'>
               <Image
                 className='rounded-3xl'                  
-                source={{ uri: image185(item.poster_path) }}
+                source={item.poster_path ? { uri: image185(item.poster_path) } : require('../assets/images/noImage.png')}
                 style={{
-                  width: width * 0.33,
-                  height: height * 0.22
+                  width: width * 0.40,
+                  height: height * 0.29
                 }
                 }
               />
-              <Text className='text-white ml-1'>
+              <Text className='text-white ml-1 text-center'>
                 {truncateText(item.title)}
               </Text>
             </View>

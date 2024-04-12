@@ -5,7 +5,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { CastElement } from '../interfaces/Cast';
 import { image342 } from '../services/api/movies';
-import { noImageToShow342 } from '../constants/movies';
 
 interface Props {
   cast: CastElement[]
@@ -13,13 +12,6 @@ interface Props {
 }
 
 export default function Cast({ cast, navigation }: Props) {
-
-  //console.log(JSON.stringify(cast[3], null, 3))
-
-  const acting = cast.filter((cast) => cast.known_for_department === 'Acting' );
-  //console.log(acting.length)
-  const realName = 'Robert Downey Jr';
-  const characterName = 'Ironman';
   return (
     <View className="my-6 px-4">
       <Text className="text-white text-lg mb-4">Cast</Text>
@@ -30,11 +22,11 @@ export default function Cast({ cast, navigation }: Props) {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => navigation.navigate('Person', { item})}>
             <Image
-              className="w-24 h-32 rounded-xl"
-              source={{ uri: item.profile_path ? image342(item.profile_path) : noImageToShow342() }}
+              className="w-24 h-32 rounded-xl mr-2"
+              source={item.profile_path ? { uri: image342(item.profile_path) } : require('../assets/images/noImage.png')}
             />
-            <Text className="text-white text-sm">{truncateText(item.name)}</Text>
-            <Text className="text-slate-500 text-xs">{truncateText(item.character || '')}</Text>
+            <Text className="text-white text-sm text-center">{truncateText(item.name)}</Text>
+            <Text className="text-slate-500 text-xs text-center">{truncateText(item.character || '')}</Text>
           </TouchableOpacity>
         )}
       />

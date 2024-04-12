@@ -76,10 +76,6 @@ export default function PersonScreen() {
                   <Text className='text-neutral-400 text-base'>{personDetails?.birthday || "Not available"}</Text>
                 </View>
                 <View className='px-2 items-center'>
-                  <Text className='text-white text-lg font-semibold'>Know for</Text>
-                  <Text className='text-neutral-400 text-base'>{item.known_for_department}</Text>
-                </View>
-                <View className='px-2 items-center'>
                   <Text className='text-white text-lg font-semibold'>Popularity</Text>
                   <Text className='text-neutral-400 text-base'>{item.popularity}</Text>
                 </View>
