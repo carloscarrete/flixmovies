@@ -4,7 +4,7 @@ export const moviesApi = axios.create({
     baseURL: "https://api.themoviedb.org/3",
     headers:{
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.API_MOVIE_TOKEN}`
+        "Authorization": `Bearer ${process.env.EXPO_PUBLIC_API_MOVIE_TOKEN}`
     }
 });
 
