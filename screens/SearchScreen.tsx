@@ -19,7 +19,8 @@ import {
     IOScrollView,
     IOScrollViewController,
     InView,
-  } from 'react-native-intersection-observer';
+} from 'react-native-intersection-observer';
+import { FlashList } from '@shopify/flash-list';
 
 interface Props {
     pageParam?: number
@@ -35,11 +36,11 @@ export default function SearchScreen() {
     const [searchQuery, setSearchQuery] = useState('');
     const { data: results } = useMovies(['movies', searchQuery], () => fetchMoviesByTitle(searchQuery));
 
-    const fetchMovies = async ({pageParam = 1} : Props) => {
-        try{
+    const fetchMovies = async ({ pageParam = 1 }: Props) => {
+        try {
             const data = await fetchMoviesByTitle(searchQuery, pageParam)
             return data;
-        }catch(error){
+        } catch (error) {
             console.log(error)
             return getEmptyMoviesDetail()
         }
@@ -54,14 +55,8 @@ export default function SearchScreen() {
         }
     })
 
-    //console.log(infiniteQueery.data?.pages[0].results)
-    //console.log(infiniteQueery.data)
-
-    //console.log(infiniteQueery.data?.pages.flatMap((page) => page.results).length)
-    //console.log(infiniteQueery.data?.pages[0].total_results)
-
     const handleTextChange = async (text: string) => {
-        if(text.length>2){
+        if (text.length > 2) {
             setSearchQuery(text)
         }
     }
@@ -81,36 +76,39 @@ export default function SearchScreen() {
                 </TouchableOpacity>
             </View>
 
-            
-            {loading ? (<LoadingC/>)  
-            : 
-            results && results.length > 0
+
+            {loading ? (<LoadingC />)
+                :
+                results && results.length > 0
                     ?
                     (<View className='flex-1 h-full overflow-y-scrol mb-3'>
                         <Text className='text-white mx-6'>Results: ({infiniteQueery.data?.pages[0].total_results})</Text>
-                        <View className='justify-center items-center'>
+                        <View className='' style={{
+                            width: Dimensions.get("screen").width,
+                            height: '100%'
+                        }}>
                             {/* FlatList */}
-                            <FlatList
-                            scrollEventThrottle={100}
-                                    data={infiniteQueery.data?.pages.flatMap(page => page.results)}
-                                    renderItem={({ item }) => (
-                                        <TouchableWithoutFeedback
-                                            onPress={() => navigation.navigate('Movie', { item })}>
-                                            <View className='items-center m-3'>
-                                                <Image
-                                                    className='rounded-2xl'
-                                                    source={{ uri: image342(item.poster_path) }}
-                                                    style={{ width: width * 0.40, height: height * 0.30 }}
-                                                />
-                                                <Text className='text-neutral-300'>{truncateText(item.title, 22)}</Text>
-                                            </View>
-                                        </TouchableWithoutFeedback>
-                                    )}
-                                    keyExtractor={item => item.id.toString()}
-                                    numColumns={Math.floor(width / (width * 0.45 + 10))}
-                                    onEndReached={() => infiniteQueery.fetchNextPage()}
-                                    onEndReachedThreshold={0.5}
-                                />
+                            <FlashList
+                                data={infiniteQueery.data?.pages.flatMap(page => page.results)}
+                                renderItem={({ item }) => (
+                                    <TouchableWithoutFeedback
+                                        onPress={() => navigation.navigate('Movie', { item })}>
+                                        <View className='items-center m-3'>
+                                            <Image
+                                                className='rounded-2xl'
+                                                source={{ uri: image342(item.poster_path) }}
+                                                style={{ width: width * 0.40, height: height * 0.30 }}
+                                            />
+                                            <Text className='text-neutral-300'>{truncateText(item.title, 22)}</Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                )}
+                                keyExtractor={item => item.id.toString()}
+                                numColumns={Math.floor(width / (width * 0.45 + 10))}
+                                onEndReached={() => infiniteQueery.fetchNextPage()}
+                                onEndReachedThreshold={0.5}
+                                estimatedItemSize={150}
+                            />
                         </View>
                     </View>)
                     :
