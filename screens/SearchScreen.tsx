@@ -11,10 +11,10 @@ import LoadingC from '../components/LoadingC';
 import { debounce } from 'lodash';
 import { fetchMoviesByTitle } from '../services/actions';
 import { Result } from '../interfaces/Movies';
-import { image342 } from '../services/api/movies';
+import { image342, image500 } from '../services/api/movies';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import useMovies from '../hooks/useMovies';
-import { getEmptyMoviesDetail } from '../constants/movies';
+import { getEmptyMoviesDetail, noImageToShow600 } from '../constants/movies';
 import {
     IOScrollView,
     IOScrollViewController,
@@ -96,7 +96,7 @@ export default function SearchScreen() {
                                         <View className='items-center m-3'>
                                             <Image
                                                 className='rounded-2xl'
-                                                source={{ uri: image342(item.poster_path) }}
+                                                 source={{ uri: item.poster_path ? image500(item?.poster_path) : noImageToShow600() }} 
                                                 style={{ width: width * 0.40, height: height * 0.30 }}
                                             />
                                             <Text className='text-neutral-300'>{truncateText(item.title, 22)}</Text>
