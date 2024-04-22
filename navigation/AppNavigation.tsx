@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image } from 'react-native';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import FilterMoviesScreen from '../screens/FilterMoviesScreen';
 
 
 const queryClient = new QueryClient();
@@ -22,10 +23,13 @@ const StackNav = () => {
       <Stack.Screen name="Movie" component={MovieScreen} />
       <Stack.Screen name="Person" component={PersonScreen} />
       <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="FilterMovies" component={FilterMoviesScreen} />
     </Stack.Navigator>
   )
 }
 
+
+/* TODO: DRAWER DROPDOWN */
 
 const Drawer = createDrawerNavigator();
 

@@ -7,16 +7,18 @@ import { truncateText } from '../utils/truncateText';
 import { Result } from '../interfaces/Movies';
 import { image185 } from '../services/api/movies';
 import { noImageToShow342 } from '../constants/movies';
+import { typeListMovie } from '../types/types';
 
 const { height, width } = Dimensions.get('window');
 
 interface Props {
   title: string,
   data: Result[]
-  hiddenAll?: boolean
+  hiddenAll?: boolean,
+  typeListMovie: typeListMovie
 }
 
-export default function MovieList({ data, title, hiddenAll = false }: Props) {
+export default function MovieList({ data, title, hiddenAll = false, typeListMovie }: Props) {
 
   const movieName = 'Gladiador - prueba de película';
 
@@ -27,7 +29,7 @@ export default function MovieList({ data, title, hiddenAll = false }: Props) {
       <View className='mx-4 flex-row justify-between items-center'>
         <Text className='text-white text-xl'>{title}</Text>                                    
         <TouchableOpacity>
-          {hiddenAll ? null : <Text className='text-xl' style={styles.secondaryText}>See All</Text>}
+          {hiddenAll ? null : <Text className='text-xl' style={styles.secondaryText} onPress={()=>navigation.navigate('FilterMovies', {typeMovie: typeListMovie})}>See All</Text>}
         </TouchableOpacity>
       </View>
       <FlatList

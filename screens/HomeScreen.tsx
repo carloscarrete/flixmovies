@@ -13,8 +13,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import LoadingC from '../components/LoadingC'
 import { fetchTopRated, fetchTrendingMovies, fetchUpcoming, } from '../services/actions'
 import useMovies from '../hooks/useMovies'
+import { typeListMovie } from '../types/types';
 
 const ios = Platform.OS === 'ios'
+
+
 
 const HomeScreen = () => {
 
@@ -57,9 +60,9 @@ const HomeScreen = () => {
                         {/* Carrusel Trending Movies */}
                         {trendingMovies && <TrendingMovies data={trendingMovies} />}
                         {/* Upcoming Movies */}
-                        {upcomingMovies && <MovieList title="Upcoming Movies" data={upcomingMovies} />} 
+                        {upcomingMovies && <MovieList title="Upcoming Movies" data={upcomingMovies} typeListMovie='upcoming' />} 
                         {/* Top Rated Movies */}
-                        {topRatedMovies && <MovieList title="Top Rated Movies" data={topRatedMovies} />}
+                        {topRatedMovies && <MovieList title="Top Rated Movies" data={topRatedMovies} typeListMovie='topRated' />}
                     </ScrollView>
             }
 

@@ -36,9 +36,9 @@ export const fetchNowPlaying = async () : Promise<Movies> => {
     }
 } 
 
-export const fetchTopRated = async () : Promise<Movies> => {
+export const fetchTopRated = async (page: number = 1) : Promise<Movies> => {
     try{
-        const {data} = await moviesApi.get<Movies>(`/movie/top_rated`);
+        const {data} = await moviesApi.get<Movies>(`/movie/top_rated?page=${page}`);
         return data;
     }catch(error){
         console.log(error)
@@ -46,9 +46,9 @@ export const fetchTopRated = async () : Promise<Movies> => {
     }
 }
 
-export const fetchUpcoming  = async () : Promise<Movies> => {
+export const fetchUpcoming  = async (page: number = 1) : Promise<Movies> => {
     try{
-        const {data} = await moviesApi.get<Movies>(`/movie/upcoming`);
+        const {data} = await moviesApi.get<Movies>(`/movie/upcoming?page=${page}`);
         return data;
     }catch(error){
         console.log(error)
