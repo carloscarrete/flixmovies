@@ -23,7 +23,7 @@ export default function FilterMoviesScreen() {
   const params = useRoute();
   const {} = params.params as { movies: Result[] }
   const { typeMovie } = params.params as { typeMovie: typeListMovie }
-  const { infiniteQueryMovies } = useInfiniteMovies({ searchQuery: 'Kung Fu Panda', pageParam: 1, keyTitle: 'upcomingg', typeMovie })
+  const { infiniteQueryMovies } = useInfiniteMovies({ searchQuery: 'Kung Fu Panda', pageParam: 1, typeMovie })
   return (
     <View className='flex-1 bg-neutral-700'>
       <View className='w-full'>
