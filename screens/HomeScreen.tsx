@@ -14,6 +14,7 @@ import LoadingC from '../components/LoadingC'
 import { fetchTopRated, fetchTrendingMovies, fetchUpcoming, } from '../services/actions'
 import useMovies from '../hooks/useMovies'
 import { typeListMovie } from '../types/types';
+import ModalCheckVersion from '../components/ModalCheckVersion'
 
 const ios = Platform.OS === 'ios'
 
@@ -29,6 +30,7 @@ const HomeScreen = () => {
 
     return (
         <View className='flex-1 bg-neutral-700'>
+            <ModalCheckVersion />
             <SafeAreaView className={ios ? '-mb-2' : '-mb-3'}>
                 <StatusBar style='dark' />
                 <View className='flex-row items-center justify-between px-4 py-6 md:py-8'>

@@ -1,8 +1,10 @@
+import { getEmptyGithubVersion } from '../constants/github';
 import { getEmptyCastCredits, getEmptyMovieCastDetail, getEmptyMovieDetail, getEmptyMoviesDetail, getEmptyPeople, getEmptyMovieResult } from '../constants/movies';
 import { Cast } from '../interfaces/Cast';
+import { GithubVersion } from '../interfaces/GitHubVersion';
 import { MovieDetail, Movies, Result } from '../interfaces/Movies';
 import { CastCredits, People, PeopleCredits } from '../interfaces/People';
-import { moviesApi } from './api/movies';
+import { gitHubApiApk, moviesApi } from './api/movies';
 
 
 
@@ -113,5 +115,16 @@ export const fetchPeopleMoviesDetailsCredits = async (id: number) : Promise<Peop
     }catch(error){
         console.log(error)
         return getEmptyMovieResult()
+    }
+}
+
+export const getLastestVersionApk = async () : Promise<GithubVersion>  => {
+    try{
+        const {data} = await gitHubApiApk.get<GithubVersion>(`latest`);
+        //console.log(data)
+        return data;
+    }catch(error){
+        console.log(error)
+        return getEmptyGithubVersion()
     }
 }
