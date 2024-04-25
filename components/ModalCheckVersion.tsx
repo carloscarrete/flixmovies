@@ -7,6 +7,9 @@ import { getLastestVersionApk } from '../services/actions';
 import Constants from 'expo-constants'
 import Markdown from 'react-native-markdown-display';
 
+import * as FileSystem from 'expo-file-system'
+
+
 
 const ModalCheckVersion = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -22,13 +25,39 @@ const ModalCheckVersion = () => {
             setIsVisible(true)
         }
 
-        return data 
+        return data
     }
 
     const { data, isLoading } = useQuery({
         queryKey: ['checkVersion'],
         queryFn: fetchVersion
     })
+
+    const downloadNewVersion = async () => {
+        const url = data?.assets[0].browser_download_url;
+
+        if (url) {
+            const fileUri = FileSystem.documentDirectory + data.assets[0].name;
+            const downloadResumable = FileSystem.createDownloadResumable(
+                url,
+                fileUri,
+                {},
+                (downloadProgress) => {
+                    console.log('Download Progress: ', downloadProgress);
+                }
+            )
+
+            try{
+                const downloadResult = await downloadResumable.downloadAsync();
+                if(downloadResult && downloadResult.uri){
+                    console.log('Finished downloading to ', downloadResult.uri);
+                }
+            }catch(error){
+                console.log(error)
+            }
+
+        }
+    }
 
     return (
         <Modal
@@ -44,7 +73,7 @@ const ModalCheckVersion = () => {
                     <Markdown style={
                         {
                             body:
-                                { color: 'white', width:  Dimensions.get("screen").width*0.75 },
+                                { color: 'white', width: Dimensions.get("screen").width * 0.75 },
                             list_item:
                             {
                                 color: 'white', width: '100%'
@@ -54,7 +83,7 @@ const ModalCheckVersion = () => {
                         {data?.body || ''}
                     </Markdown>
                     <View className='items-center justify-around flex-row w-80 mt-3'>
-                        <Pressable className='bg-slate-500 rounded-lg p-2' onPress={() => setIsVisible(false)}>
+                        <Pressable className='bg-slate-500 rounded-lg p-2' onPress={downloadNewVersion}>
                             <Text style={styles.modalButtonText}>Descargar</Text>
                         </Pressable>
                         <Pressable className='bg-red-400 rounded-lg p-2' onPress={() => setIsVisible(false)}>
